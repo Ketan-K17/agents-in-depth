@@ -85,6 +85,22 @@ class ToolRegistry:
         )
 
         self.register_tool(
+            name="parse_pdf",
+            function=self.parse_pdf,
+            description="Extract text from a PDF available at a URL or local file path.",
+            parameters={
+                "type": "object",
+                "properties": {
+                    "url": {
+                        "type": "string",
+                        "description": "A PDF URL, a file:// URL, or a local file path."
+                    }
+                },
+                "required": ["url"]
+            }
+        )
+
+        self.register_tool(
             name="code_interpreter",
             function=self.code_interpreter,
             description="Execute Python code for calculations and data processing. You MUST use this tool to perform any complex calculations or data processing.",

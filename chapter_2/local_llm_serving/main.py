@@ -341,6 +341,12 @@ def run_single_task(agent: ToolCallingAgent, task: str, stream: bool = True):
 
 def interactive_mode(agent: ToolCallingAgent, stream: bool = True):
     """Run interactive chat mode with optional streaming"""
+    def print_conversation_history():
+        """Show the messages retained by the active backend after a turn."""
+        history = getattr(agent.agent, "conversation_history", None)
+        print("\n🧾 Conversation history:")
+        print(json.dumps(history, indent=2, default=str))
+
     print("\n" + "="*60)
     print("💬 INTERACTIVE MODE" + (" (STREAMING)" if stream else ""))
     print("="*60)
@@ -501,11 +507,13 @@ def interactive_mode(agent: ToolCallingAgent, stream: bool = True):
                     last_chunk_type = chunk_type
                 
                 print()  # New line after streaming
+                print_conversation_history()
             else:
                 print("\n⏳ Processing...")
                 response = agent.chat(user_input, stream=False)
                 
                 print(f"🤖 Assistant: {response}")
+                print_conversation_history()
             
         except KeyboardInterrupt:
             print("\n\n👋 Goodbye!")
